@@ -1,15 +1,10 @@
+from turtle import distance
 from flask import Flask
-from flask_restful import Api
-from resources.distance import Distance
+from blueprints.distance import distance_api
 
 app = Flask(__name__)
-api = Api(app)
 
-
-def set_api() -> None:
-    api.add_resource(Distance, '/<string:address>')
-
+app.register_blueprint(distance_api)
 
 if __name__ == '__main__':
-    set_api()
     app.run(debug=True)

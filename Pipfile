@@ -8,7 +8,6 @@ flask = "*"
 requests = "*"
 haversine = "*"
 shapely = "*"
-flask-restful = "*"
 
 [dev-packages]
 
