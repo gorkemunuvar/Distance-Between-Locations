@@ -1,8 +1,10 @@
 import logging
 from flask import Blueprint, request
+
+import return_strings as r
 from services.geocoding import get_coordinate
-from services.point_polygon import in_polygon
-from services.distance import calculate_distance, calculate_distance_gh
+from services.polygon import inside_polygon
+from services.distance import calculate_distance
 
 
 distance_api = Blueprint('distance', __name__)
@@ -10,70 +12,39 @@ distance_api = Blueprint('distance', __name__)
 
 @distance_api.route('/', methods=['GET'])
 def get_distance():
-    params = request.args
-    address = params.get('address', None)
+    # Get address query string parameter.
+    address = request.args.get('address', None)
 
     if address is None:
-        return {'message': '<address> parameter is missing.'}
+        return {'message': r.ADDRESS_MISSING}, 400
 
+    # Get latitude and longitude using the given address.
     coordinate = get_coordinate(address.lower())
 
     if coordinate is None:
-        logging.error(msg='Make sure that address information is correct.')
+        logging.error(msg=r.ADDRESS_WARNING)
+        return {'message': r.ADDRESS_WARNING}, 500
 
-        return {
-            'message': 'Make sure that address information is correct.'
-        }, 500
+    # Check whether if the coordinate is inside MKAD.
+    inside_polygon_result = inside_polygon(coordinate['lat'],
+                                           coordinate['lon'])
 
-    in_polygon_result = in_polygon(coordinate['lat'], coordinate['lon'])
+    if inside_polygon_result is None:
+        logging.info(msg=r.COORD_RANGE_WARNING)
+        return {'message': r.COORD_RANGE_WARNING}, 500
 
-    if in_polygon_result is None:
-        msg = 'Valid latitude range(-90, 90), Valid longitude range(-180, 180)'
-        logging.info(msg=msg)
+    # If the given address is inside MKAD
+    if inside_polygon_result:
+        logging.info(msg=r.NO_NEED_CALCULATING)
+        return {'message': r.NO_NEED_CALCULATING}, 200
 
-        return {'message': msg}, 500
+    # Calculate distance between MKAD and the given address
+    distance = calculate_distance(coordinate['lon'], coordinate['lat'])
 
-    if in_polygon_result:
-        msg = 'No need to calculate. Address is already in Moscow Ring Road.'
-        logging.info(msg=msg)
-
-        return {'message': msg}, 200
-
-    # Points were gotten from the link below
-    # https://www.coordinatesfinder.com/coordinates
-    # /810957-66-km-mkad-moscow-russia
-    source_lon = 37.3903193
-    source_lat = 55.8142861
-    target_lon = coordinate['lon']
-    target_lat = coordinate['lat']
-
-    distance = 0
-    use_graphhopper = params.get('use_graphhopper', None)
-
-    if use_graphhopper:
-        distance = calculate_distance_gh(source_lon, source_lat,
-                                         target_lon, target_lat)
-
-        if distance is None:
-            logging.error(
-                msg='While calculating distance with GRAPHHOPPER')
-
-            return {
-                'message': 'Something went wrong while calculating distance.'
-            }, 500
-
-    else:
-        distance = calculate_distance(source_lon, source_lat,
-                                      target_lon, target_lat)
-
-        if distance is None:
-            logging.error(msg='While calculating distance with OSRM.')
-
-            return {
-                'message': '''Somehting went wrong while calculating distance. 
-                              Try <use_graph_hopper>  query parameter to use
-                              GRAPHHOPPER Routing Machine for calculating instead '''
-            }, 500
+    # Sometimes with OSRM API it is possbile to see server errors.
+    if distance is None:
+        logging.error(msg=r.SMTH_WENT_WRONG_OSRM)
+        return {'message': r. SMTH_WENT_WRONG_OSRM}, 500
 
     response = {
         'from': 'Moscow Ring Road',
@@ -82,5 +53,4 @@ def get_distance():
     }
 
     logging.info(msg=response)
-
     return response, 200

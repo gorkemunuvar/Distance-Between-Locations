@@ -1,7 +1,12 @@
-GEOCODE_URL = 'https://geocode-maps.yandex.ru/1.x/?apikey={}&format=json&geocode={}&lang=en-US'
-ROUTING_URL_OSRM = 'http://router.project-osrm.org/route/v1/driving/{},{};{},{}?overview=false'
-ROUTING_URL_GHOPPER = 'https://graphhopper.com/api/1/route?point={},{}&point={},{}&vehicle=car&locale=de&calc_points=false&key={}'
+# Coordinate of Moscow Ring Road
+MKAD_LONGITUDE = 37.3903193
+MKAD_LATITUDE = 55.8142861
 
+# API URLs
+GEOCODE_URL = 'https://geocode-maps.yandex.ru/1.x/?apikey={}&format=json&geocode={}&lang=en-US'
+ROUTING_URL_OSRM = 'http://router.project-osrm.org/route/v1/driving/37.3903193,55.8142861;{},{}?overview=false'
+
+# MKAD coordinates to create a polygon
 MKAD_KM = [
     [1, 37.842762, 55.774558],
     [2, 37.842789, 55.76522],

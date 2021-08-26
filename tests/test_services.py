@@ -1,15 +1,16 @@
 import unittest
 import services
+
 from services.geocoding import get_coordinate
-from services.point_polygon import in_polygon
-from services.distance import calculate_distance, calculate_distance_gh
+from services.polygon import inside_polygon
+from services.distance import calculate_distance
 
 # RUNING TEST
 # python -m unittest tests.test_services -v
 
 
 class ServicesTestCase(unittest.TestCase):
-    # Ensure that geocoding functionality works
+    # Ensure that geocoding functionality works.
     def test_get_coordinate(self):
         coordinate1 = get_coordinate('İstanbul')
         coordinate2 = get_coordinate('lsafdj')    # invalid input
@@ -23,13 +24,13 @@ class ServicesTestCase(unittest.TestCase):
         self.assertEqual(coordinate4, None)
         self.assertEqual(coordinate5, None)
 
-    # Ensure that in_polygon func. works as expected
-    def test_in_polygon(self):
-        result1 = in_polygon(55.869046, 37.489491)  # Khovrino District
-        result2 = in_polygon(55.804552, 37.670636)  # Sokolniki Park
-        result3 = in_polygon(58.564392, 25.660798)  # Estonia
-        result4 = in_polygon(-91.11111, 32.854049)  # Nowhere (Edge case)
-        result5 = in_polygon(95.545858, -181.5444)  # Nowhere (Corner case)
+    # Ensure that inside_polygon func. works as expected.
+    def test_inside_polygon(self):
+        result1 = inside_polygon(55.869046, 37.489491)  # Khovrino District
+        result2 = inside_polygon(55.804552, 37.670636)  # Sokolniki Park
+        result3 = inside_polygon(58.564392, 25.660798)  # Estonia
+        result4 = inside_polygon(-91.11111, 32.854049)  # Nowhere (Edge case)
+        result5 = inside_polygon(95.545858, -181.5444)  # Nowhere (Corner case)
 
         self.assertEqual(result1, True)
         self.assertEqual(result2, True)
@@ -37,31 +38,15 @@ class ServicesTestCase(unittest.TestCase):
         self.assertEqual(result4, None)
         self.assertEqual(result5, None)
 
-    # Ensure that OSRM API calculate distance func. works as we want
+    # Ensure that OSRM API calculate distance func. works as we want.
     def test_calculate_distance(self):
-        slon = 37.3903193
-        slat = 55.8142861
-
-        distance1 = calculate_distance(slon, slat, 13.375142, 52.518621)
-        distance2 = calculate_distance(slon, slat, 5.83843, 52.848781)
-        distance3 = calculate_distance(slon, slat, 30.315877, 59.939099)
+        distance1 = calculate_distance(13.375142, 52.518621)
+        distance2 = calculate_distance(5.83843, 52.848781)
+        distance3 = calculate_distance(30.315877, 59.939099)
 
         self.assertEqual(distance1, 1817184.1)  # to Berlin
         self.assertEqual(distance2, 2410495.4)  # to Netherlands
         self.assertEqual(distance3, 697243.2)   # to St. Petersburg
-
-    # Ensure that GRAPHHOPPER API calculate distance func. works as we want
-    def test_calculate_distance_gh(self):
-        slon = 37.3903193  # source longitude
-        slat = 55.8142861  # source latitude
-
-        distance1 = calculate_distance_gh(slon, slat, 13.375142, 52.518621)
-        distance2 = calculate_distance_gh(slon, slat, 5.83843, 52.848781)
-        distance3 = calculate_distance_gh(slon, slat, 30.315877, 59.939099)
-
-        self.assertEqual(distance1, 1816858.066)  # to Berlin
-        self.assertEqual(distance2, 2406151.711)  # to Netherlands
-        self.assertEqual(distance3, 696927.77)    # to St. Petersburg
 
 
 if __name__ == '__main__':

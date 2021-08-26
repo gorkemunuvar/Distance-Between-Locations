@@ -9,6 +9,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 app.register_blueprint(distance_api, url_prefix='/distance')
 
+# This line creates a log file.
 logging.basicConfig(filename='logs.log',
                     encoding='utf-8',
                     level=logging.DEBUG)
