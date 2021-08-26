@@ -18,14 +18,20 @@ def get_distance():
 
     coordinate = get_coordinate(address.lower())
 
-    if coordinate is None or coordinate['geo_object_count'] == 0:
-        logging.error(msg='Error while getting coordinate of the address.')
+    if coordinate is None:
+        logging.error(msg='Make sure that address information is correct.')
 
         return {
-            'message': 'Something went wrong while getting coordinate from the given address. Make sure that address information is valid.'
+            'message': 'Make sure that address information is correct.'
         }, 500
 
     in_polygon_result = in_polygon(coordinate['lat'], coordinate['lon'])
+
+    if in_polygon_result is None:
+        msg = 'Valid latitude range(-90, 90), Valid longitude range(-180, 180)'
+        logging.info(msg=msg)
+
+        return {'message': msg}, 500
 
     if in_polygon_result:
         msg = 'No need to calculate. Address is already in Moscow Ring Road.'

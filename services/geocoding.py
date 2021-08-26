@@ -12,13 +12,12 @@ def get_coordinate(address: str) -> Union[Dict[float, float], None]:
         geo_objects = data['response']['GeoObjectCollection']['featureMember']
 
         if len(geo_objects) == 0:
-            return {'geo_object_count': 0}
+            return None
 
         data = geo_objects[0]['GeoObject']['Point']['pos']
         coordinate = data.split(' ')
 
         return {
-            'geo_object_count': len(geo_objects),
             'lat': float(coordinate[1]),
             'lon': float(coordinate[0])
         }

@@ -6,6 +6,13 @@ from constants import MKAD_KM
 
 
 def in_polygon(lat: float, lon: float) -> bool:
+    statement1 = lat < -90 or lat > 90
+    statement2 = lon < -180 or lon > 180
+
+    # Corner case check
+    if statement1 or statement2:
+        return None
+
     boundaries = [(x[2], x[1]) for x in MKAD_KM]
 
     point = Point(lat, lon)
