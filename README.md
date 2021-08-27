@@ -72,13 +72,13 @@ because it is open source and not suitible for production.
 
 You sould firstly make sure that you have Docker installed on your machine.
 
-To create a Docker image run:
+To create a Docker image, run:
 
 ```
 docker build -t <your image name>:latest .
 ```
 
-To create a docker container from the Docker image run:
+To create a docker container from the Docker image, run:
 
 ```
 docker run -it <your image name>
