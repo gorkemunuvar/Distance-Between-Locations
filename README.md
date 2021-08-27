@@ -38,6 +38,12 @@ pipenv install --dev
 
 ## How to Run
 
+Before you run the application you should first activate your virtual environment using:
+
+```
+pipenv shell
+```
+
 You should run the `app.py` using the command below:
 
 ```
