@@ -68,6 +68,26 @@ If all tests are passed, you won't have any problem while working or using the A
 `DON'T` forget it is possbible to see server errors while getting distance using OSRM API
 because it is open source and not suitible for production.
 
+## Creating Docker Image and Docker Container
+
+You sould firstly make sure that you have Docker installed on your machine.
+
+To create a Docker image run:
+
+```
+docker build -t <your image name>:latest .
+```
+
+To create a docker container from the Docker image run:
+
+```
+docker run -it <your image name>
+```
+### Note
+
+Docker iamge size can be smaller with implementing a ray casting algorithm to check if a point is insdide a polygon. But in this project `shapely` module used.
+
+
 # Docs
 
 There are some example responses here but all the API documentation created by POSTMAN can be found in the link below.
@@ -115,7 +135,7 @@ When the API returns the response that includes distance correctly it looks like
 
 In the response body distance value is kilometer(km).
 
-## Note
+### Note
 
 It is rarerly possible to see 500 server errors while getting the distance using the OSRM API because it is open source and not suitible for production.
 The reason that I did not use Yandex Routing Machine, it was not free.
