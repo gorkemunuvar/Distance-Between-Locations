@@ -5,9 +5,6 @@ from services.geocoding import get_coordinate
 from services.polygon import inside_polygon
 from services.distance import calculate_distance
 
-# RUNING TEST
-# python -m unittest tests.test_services -v
-
 
 class ServicesTestCase(unittest.TestCase):
     # Ensure that geocoding functionality works.

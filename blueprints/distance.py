@@ -1,7 +1,7 @@
 import logging
 from flask import Blueprint, request
 
-import return_strings as r
+import returning_strings as r
 from services.geocoding import get_coordinate
 from services.polygon import inside_polygon
 from services.distance import calculate_distance
@@ -12,7 +12,7 @@ distance_api = Blueprint('distance', __name__)
 
 @distance_api.route('/', methods=['GET'])
 def get_distance():
-    # Get address query string parameter.
+    # Get address from query string parameters.
     address = request.args.get('address', None)
 
     if address is None:
@@ -23,7 +23,7 @@ def get_distance():
 
     if coordinate is None:
         logging.error(msg=r.ADDRESS_WARNING)
-        return {'message': r.ADDRESS_WARNING}, 500
+        return {'message': r.ADDRESS_WARNING}, 400
 
     # Check whether if the coordinate is inside MKAD.
     inside_polygon_result = inside_polygon(coordinate['lat'],

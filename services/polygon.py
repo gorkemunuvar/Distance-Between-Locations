@@ -8,9 +8,10 @@ from constants import MKAD_KM
 def inside_polygon(lat: float, lon: float) -> bool:
     # To understnad if the specified address is located inside the MKAD
     # I used a simple mathematical trick. It check if the given point
-    # is inside the given MKAD polygon using shapely module.  
-    
-    """Returns true if the given coordinate is inside the MKAD.
+    # is inside the given MKAD polygon using shapely module.
+    """
+    Returns true if the given coordinate is inside the MKAD.
+    Returns None if lat and lon values are not valid.
 
     Parameters
     ----------

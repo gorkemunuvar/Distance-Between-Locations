@@ -17,7 +17,14 @@ logging.basicConfig(filename='logs.log',
 
 @app.route('/', methods=['GET'])
 def index():
-    return 'Welcome to Distance Calculator', 200
+    return {
+        'message': 'Welcome to Distance Calculator'
+    }, 200
+
+
+@app.errorhandler(404)
+def url_not_found(e):
+    return {'Error': 'URL not found.'}, 404
 
 
 if __name__ == '__main__':

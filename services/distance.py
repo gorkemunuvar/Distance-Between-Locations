@@ -11,11 +11,12 @@ def calculate_distance(target_lon: float, target_lat: float) -> Union[float, Non
     # must be used. Instead of using Yandex Routing Machine, Open Street
     # Routing Machine was prefered here because it is open source and free.
     """Calculates the distance between MKAD and the given coordinate of an address.
+       Returns None if the distance value does not exist in response.
 
-        Parameters
-        ----------
-        target_lon : Target longitude you want to calculate the distance to from MKAD.
-        target_lat : Target latitude you want to calculate the distance to from MKAD.
+       Parameters
+       ----------
+       target_lon : Target longitude you want to calculate the distance to from MKAD.
+       target_lat : Target latitude you want to calculate the distance to from MKAD.
     """
 
     url = ROUTING_URL_OSRM.format(target_lon, target_lat)

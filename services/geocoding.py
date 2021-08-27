@@ -16,6 +16,7 @@ from constants import GEOCODE_URL
 
 def get_coordinate(address: str) -> Union[Dict[float, float], None]:
     """ Returns the coordinate of a given address using Yandex Geocoding API.
+        Returns None if the coordinate can not be grabed. 
 
         Parameters
         ----------
@@ -44,4 +45,3 @@ def get_coordinate(address: str) -> Union[Dict[float, float], None]:
         }
 
     return None
-
