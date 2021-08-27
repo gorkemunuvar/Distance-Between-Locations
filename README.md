@@ -85,7 +85,7 @@ docker run -it <your image name>
 ```
 ### Note
 
-Docker iamge size can be smaller with implementing a ray casting algorithm to check if a point is insdide a polygon. But in this project `shapely` module used.
+Docker image size can be smaller with implementing a ray casting algorithm to check if a point is insdide a polygon. But in this project `shapely` module used.
 
 
 # Docs
